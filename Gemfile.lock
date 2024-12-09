@@ -1,0 +1,25 @@
+PATH
+  remote: .
+  specs:
+    ruby-chacha20 (0.1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    minitest (5.25.2)
+    rake (13.2.1)
+    rake-compiler (1.2.8)
+      rake
+
+PLATFORMS
+  ruby
+  x86_64-linux
+
+DEPENDENCIES
+  minitest (~> 5.0)
+  rake (~> 13.0)
+  rake-compiler (~> 1.0)
+  ruby-chacha20!
+
+BUNDLED WITH
+   2.5.23
