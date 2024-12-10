@@ -119,8 +119,24 @@ class TestChaCha20 < Minitest::Test
 
       cipher = ChaCha20.new(key, nonce)
       cipher.seek(counter * 64 + block_offset)
+      assert_equal keystream.unpack("H*"), cipher.encrypt("\x00".b * keystream.bytesize).unpack("H*")
 
+      cipher = ChaCha20.new(key)
+      cipher.init_nonce(nonce)
+      cipher.seek(counter * 64 + block_offset)
       assert_equal keystream.unpack("H*"), cipher.encrypt("\x00".b * keystream.bytesize).unpack("H*")
     end
+  end
+
+  def test_nonce_returns_the_set_nonce
+    c = ChaCha20.new("\x00" * 32, "\x00" * 8)
+    assert_equal "\x00" * 8, c.nonce
+
+    c = ChaCha20.new("\x00" * 32, "\x00\x01\x02\x03\x04\x05\x06\x07")
+    assert_equal "\x00\x01\x02\x03\x04\x05\x06\x07", c.nonce
+
+    c = ChaCha20.new("\x00" * 32)
+    c.init_nonce("\x31\x32\x33\x34\x35\x36\x37\x38")
+    assert_equal "\x31\x32\x33\x34\x35\x36\x37\x38", c.nonce
   end
 end
