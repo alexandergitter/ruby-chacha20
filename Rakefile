@@ -11,8 +11,9 @@ task test: :compile
 task default: :test
 
 task benchmark: :compile do
+  $LOAD_PATH.unshift File.expand_path("lib", __dir__)
   require "benchmark"
-  require_relative "lib/ruby-chacha20"
+  require "ruby-chacha20"
 
   def read_hex(inp)
     [inp.gsub(/\s+/, "")].pack("H*")
