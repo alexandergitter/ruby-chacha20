@@ -8,7 +8,11 @@ only, it does not provide any kind of message authentication or integrity checki
 
 ## Installation
 
-For the time being, this is not on rubygems.org. Point your Gemfile to this repository.
+Add this Gem to your Gemfile:
+
+```ruby
+gem "ruby-chacha20"
+```
 
 ## Usage
 
