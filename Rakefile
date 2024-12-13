@@ -13,6 +13,7 @@ task default: :test
 task benchmark: :compile do
   $LOAD_PATH.unshift File.expand_path("lib", __dir__)
   require "benchmark"
+  require "memory_profiler"
   require "ruby-chacha20"
 
   def read_hex(inp)
@@ -27,4 +28,8 @@ task benchmark: :compile do
   Benchmark.bm do |bm|
     bm.report("ChaCha20#encrypt") { ChaCha20.new(key, nonce).encrypt("\x00".b * bytesize) }
   end
+
+  MemoryProfiler.report do
+    ChaCha20.new(key, nonce).encrypt("\x00".b * bytesize)
+  end.pretty_print
 end

@@ -55,6 +55,14 @@ class TestChaCha20 < Minitest::Test
     assert_equal 48, c.instance_variable_get(:@block_offset)
   end
 
+  def test_encrypt_correctly_advances_keystream
+    c = ChaCha20.new("\x00" * 32, "\x00" * 8)
+    assert_equal "76b8e0ada0f13d90405d6ae55386bd28bdd219b8a08ded1aa836efcc8b770dc7da41597c5157488d7724e03fb8d84a376a43", c.encrypt("\x00" * 50).unpack("H*").first
+    assert_equal "b8f41518a11cc387b669b2ee65869f07e7be5551387a98ba977c732d080dcb0f29a048e3656912c6533e32ee7aed29b72176", c.encrypt("\x00" * 50).unpack("H*").first
+    assert_equal "9ce64e43d57133b074d839d531ed1f28510afb45ace10a1f4b", c.encrypt("\x00" * 25).unpack("H*").first
+    assert_equal "794d6f2d09a0e663266ce1ae7ed1081968a0758e718e997bd3", c.encrypt("\x00" * 25).unpack("H*").first
+  end
+
   def vectors
     [
       {

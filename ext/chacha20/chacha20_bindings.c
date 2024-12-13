@@ -71,18 +71,21 @@ static VALUE rb_chacha20_get_counter(VALUE self) {
   return rb_ull2inum(((unsigned LONG_LONG)(ctx->input[13]) << 32) | (unsigned LONG_LONG)(ctx->input[12]));
 }
 
-static VALUE rb_chacha20_encrypt_or_decrypt(VALUE self, VALUE input) {
-  VALUE output;
+static VALUE rb_chacha20_encrypt_or_decrypt(VALUE self, VALUE input, VALUE outbuf) {
   ECRYPT_ctx *ctx;
 
   Check_Type(input, RUBY_T_STRING);
+  Check_Type(outbuf, RUBY_T_STRING);
+
+  if (RSTRING_LEN(outbuf) != RSTRING_LEN(input)) {
+    rb_raise(rb_eArgError, "Output buffer must have the same size as the input");
+  }
 
   Data_Get_Struct(self, ECRYPT_ctx, ctx);
 
-  output = rb_str_new(0, RSTRING_LEN(input));
-  ECRYPT_encrypt_bytes(ctx, (const unsigned char*)RSTRING_PTR(input), (unsigned char*)RSTRING_PTR(output), (unsigned int)RSTRING_LEN(input));
+  ECRYPT_encrypt_bytes(ctx, (const unsigned char*)RSTRING_PTR(input), (unsigned char*)RSTRING_PTR(outbuf), (unsigned int)RSTRING_LEN(input));
 
-  return output;
+  return outbuf;
 }
 
 void Init_chacha20_bindings() {
@@ -95,5 +98,5 @@ void Init_chacha20_bindings() {
   rb_define_private_method(cChaCha20, "get_nonce", rb_chacha20_get_nonce, 0);
   rb_define_private_method(cChaCha20, "set_counter", rb_chacha20_set_counter, 1);
   rb_define_private_method(cChaCha20, "get_counter", rb_chacha20_get_counter, 0);
-  rb_define_private_method(cChaCha20, "encrypt_or_decrypt", rb_chacha20_encrypt_or_decrypt, 1);
+  rb_define_private_method(cChaCha20, "encrypt_or_decrypt", rb_chacha20_encrypt_or_decrypt, 2);
 }

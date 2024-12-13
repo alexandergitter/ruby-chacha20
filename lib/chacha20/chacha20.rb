@@ -50,14 +50,14 @@ class ChaCha20
 
     length = input.bytesize
 
-    result = "\x00".b * @block_offset + input
-    result = encrypt_or_decrypt(result)
-    result = result.slice(@block_offset, length)
+    buffer = "\x00".b * @block_offset + input
+    buffer = encrypt_or_decrypt(buffer, buffer)
+    buffer.slice!(0, @block_offset)
 
     @block_offset = (@block_offset + length) % 64
     set_counter(get_counter - 1) unless @block_offset.zero?
 
-    result
+    buffer
   end
 
   alias_method :decrypt, :encrypt
