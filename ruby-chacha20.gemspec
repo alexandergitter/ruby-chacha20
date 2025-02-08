@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name = "ruby-chacha20"
-  spec.version = "0.1.0"
+  spec.version = "0.1.1"
   spec.authors = ["Alexander Gitter"]
   spec.email = ["contact@agitter.de"]
 
